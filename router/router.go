@@ -1,10 +1,13 @@
 package router
 
 import (
+	"fmt"
+	"net/http"
 	"strings"
 	"unicode/utf8"
 
 	"github.com/labstack/echo"
+	"github.com/labstack/echo/middleware"
 	"github.com/pkg/errors"
 )
 
@@ -16,15 +19,25 @@ type Msg struct {
 	Text string `json:"text"`
 }
 
+type TextNum struct {
+	AvailableSpace int `json:"availablespace"`
+	NoSpace        int `json:"nospace"`
+}
+
 func NewRouter() *LetterCounter {
 	lc := &LetterCounter{
 		E: echo.New(),
 	}
 
+	lc.E.Use(middleware.Logger())
+	lc.E.Use(middleware.Recover())
+
+	lc.E.GET("/count", lc.RecvText)
+
 	return lc
 }
 
-func CountLetter(text string) (int, int) {
+func CountLetter(text string) TextNum {
 	var availableSpace int
 	var noSpace int
 
@@ -35,7 +48,7 @@ func CountLetter(text string) (int, int) {
 	availableSpace = utf8.RuneCountInString(text)
 	noSpace = utf8.RuneCountInString(noSpaceText)
 
-	return availableSpace, noSpace
+	return TextNum{availableSpace, noSpace}
 }
 
 func (lc *LetterCounter) RecvText(c echo.Context) error {
@@ -45,6 +58,13 @@ func (lc *LetterCounter) RecvText(c echo.Context) error {
 	if err != nil {
 		return errors.Wrap(err, "failed bind msg")
 	}
+
+	fmt.Println(msg.Text)
+	textnum := CountLetter(msg.Text)
+
+	fmt.Println(textnum.AvailableSpace)
+
+	c.JSON(http.StatusOK, textnum)
 
 	return nil
 }
