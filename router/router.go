@@ -32,7 +32,17 @@ func NewRouter() *LetterCounter {
 	lc.E.Use(middleware.Logger())
 	lc.E.Use(middleware.Recover())
 
-	lc.E.GET("/count", lc.RecvText)
+	lc.E.POST("/count", lc.RecvText)
+	lc.E.GET("/", func(c echo.Context) error {
+		http.ServeFile(c.Response().Writer, c.Request(), "./page/index.html")
+
+		return nil
+	})
+	lc.E.GET("/js", func(c echo.Context) error {
+		http.ServeFile(c.Response().Writer, c.Request(), "./page/index.js")
+
+		return nil
+	})
 
 	return lc
 }
