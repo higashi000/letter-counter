@@ -14,9 +14,7 @@ function Count() {
    .then(res => res.json())
    .then(function(resJSON) {
       console.log(resJSON['Object'])
-      document.getElementById('result_inspace').value = resJSON['availablespace']
-      document.getElementById('result_inspace').value = resJSON.availablespace
+      document.getElementById('result_withspace').value = resJSON['withspace']
       document.getElementById('result_nospace').value = resJSON['nospace']
-      document.getElementById('result_nospace').value = resJSON.nospace
    });
 }

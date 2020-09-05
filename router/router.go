@@ -20,7 +20,7 @@ type Msg struct {
 }
 
 type TextNum struct {
-	AvailableSpace int `json:"availablespace"`
+	AvailableSpace int `json:"withspace"`
 	NoSpace        int `json:"nospace"`
 }
 
