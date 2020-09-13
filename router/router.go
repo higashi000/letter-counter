@@ -3,9 +3,8 @@ package router
 import (
 	"fmt"
 	"net/http"
-	"strings"
-	"unicode/utf8"
 
+	"github.com/higashi000/letter-counter/count"
 	"github.com/labstack/echo"
 	"github.com/labstack/echo/middleware"
 	"github.com/pkg/errors"
@@ -47,20 +46,6 @@ func NewRouter() *LetterCounter {
 	return lc
 }
 
-func CountLetter(text string) TextNum {
-	var availableSpace int
-	var noSpace int
-
-	noSpaceText := strings.Replace(text, " ", "", -1)
-
-	noSpaceText = strings.Replace(noSpaceText, "　", "", -1)
-
-	availableSpace = utf8.RuneCountInString(text)
-	noSpace = utf8.RuneCountInString(noSpaceText)
-
-	return TextNum{availableSpace, noSpace}
-}
-
 func (lc *LetterCounter) RecvText(c echo.Context) error {
 	var msg Msg
 
@@ -70,7 +55,7 @@ func (lc *LetterCounter) RecvText(c echo.Context) error {
 	}
 
 	fmt.Println(msg.Text)
-	textnum := CountLetter(msg.Text)
+	textnum := count.CountLetter(msg.Text)
 
 	fmt.Println(textnum.AvailableSpace)
 
