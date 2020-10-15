@@ -3,11 +3,14 @@ package count
 import (
 	"strings"
 	"unicode/utf8"
-
-	"github.com/higashi000/letter-counter/router"
 )
 
-func CountLetter(text string) router.TextNum {
+type TextNum struct {
+	AvailableSpace int `json:"withspace"`
+	NoSpace        int `json:"nospace"`
+}
+
+func CountLetter(text string) TextNum {
 	var availableSpace int
 	var noSpace int
 
@@ -21,6 +24,7 @@ func CountLetter(text string) router.TextNum {
 	return TextNum{availableSpace, noSpace}
 }
 
-func CountWord(text string) wordNum {
+func CountWord(text string) int {
 
+	return 0
 }

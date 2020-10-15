@@ -18,11 +18,6 @@ type Msg struct {
 	Text string `json:"text"`
 }
 
-type TextNum struct {
-	AvailableSpace int `json:"withspace"`
-	NoSpace        int `json:"nospace"`
-}
-
 func NewRouter() *LetterCounter {
 	lc := &LetterCounter{
 		E: echo.New(),
